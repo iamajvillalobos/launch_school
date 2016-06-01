@@ -29,7 +29,6 @@ user_name = gets.chomp
 prompt("Welcome #{user_name}!")
 
 loop do
-  
   first_number = ''
   loop do
     prompt(MESSAGES['first_number_prompt'])
