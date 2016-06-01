@@ -3,6 +3,10 @@
 # perform the operation on the two numbers
 # output the result
 
+require 'yaml'
+
+MESSAGES = YAML.load_file('calculator_messages.yml')
+
 def prompt(message)
   puts "=> #{message}"
 end
@@ -17,7 +21,7 @@ def valid_choice?(choice)
 end
 
 prompt("-----------------------------")
-prompt("| Welcome to the Calculator |")
+prompt("| #{MESSAGES['welcome_message']} |")
 prompt("-----------------------------")
 
 prompt("Enter your name:")
@@ -28,31 +32,31 @@ loop do
   
   first_number = ''
   loop do
-    prompt("What's the first number?")
+    prompt(MESSAGES['first_number_prompt'])
     first_number = gets.chomp
     if valid_number?(first_number)
       break
     else
-      prompt("There seems to be a problem with your first_number")
+      prompt(MESSAGES['first_number_error'])
     end
   end
 
   second_number = ''
   loop do
-    prompt("What's the second number?")
+    prompt(MESSAGES['second_number_prompt'])
     second_number = gets.chomp
     if valid_number?(second_number)
       break
     else
-      prompt("There seems to be a problem with your second_number")
+      prompt(MESSAGES['second_number_error'])
     end
   end
 
-  prompt("What operation do you want to perform?")
-  prompt("1) Add")
-  prompt("2) Subtract")
-  prompt("3) Multiply")
-  prompt("4) Divide")
+  prompt(MESSAGES['operation_prompt'])
+  prompt(MESSAGES['operation_add'])
+  prompt(MESSAGES['operation_subtract'])
+  prompt(MESSAGES['operation_multiply'])
+  prompt(MESSAGES['operation_divide'])
 
   operator = ''
   loop do
@@ -60,7 +64,7 @@ loop do
     if valid_choice?(operator)
       break
     else
-      prompt("You input an option not in the allowed operations")
+      prompt(MESSAGES['operation_error'])
     end
   end
 
@@ -79,6 +83,10 @@ loop do
   prompt("The result is: #{result}")
   prompt("------------------------")
 
-  prompt("Do you want to calculate again?")
+  prompt(MESSAGES['try_again_prompt'])
   break unless gets.chomp.start_with?('y')
 end
+
+prompt("----------------------------------")
+prompt("| #{MESSAGES['goodbye_message']} |")
+prompt("----------------------------------")

@@ -1,0 +1,13 @@
+welcome_message: 'Welcome to the Calculator'
+first_number_prompt: "What's the first number?"
+first_number_error: "There seems to be a problem with your first_number"
+second_number_prompt: "What's the second number?"
+second_number_error: "There seems to be a problem with your second_number"
+operation_prompt: "What operation do you want to perform?"
+operation_add: "1) Add"
+operation_subtract: "2) Subtract"
+operation_multiply: "3) Multiply"
+operation_divide: "4) Divide"
+operation_error: "You input an option not in the allowed operations"
+try_again_prompt: "Do you want to calculate again?"
+goodbye_message: "Thank you for using Calculator"
