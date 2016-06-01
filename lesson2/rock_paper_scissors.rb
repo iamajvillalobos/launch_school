@@ -54,5 +54,4 @@ loop do
   break unless answer.start_with?('y')
 end
 
-prompt("Thank for playing rock paper and scissors!")
-
+prompt("Thank for playing rock paper and scissors")
