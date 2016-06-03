@@ -24,14 +24,24 @@ def display_board(board)
   puts ""
 end
 
-def player_place_piece(board)
-  puts "Choose a square: (1-9)"
-  square = gets.chomp.to_i
-  board[square] = 'X'
+def empty_squares(board)
+  board.keys.select { |num| board[num] == INITIALIZE_MARKER }
+end
+
+def player_add_piece!(board)
+  square = ''
+  loop do
+    puts "Choose a square (1 - 9)"
+    square = gets.chomp.to_i
+    break if empty_squares(board).include?(square)
+    puts "Invalid option. Please select from valid choices."
+  end
+
+  board[square] = PLAYER_MARKER
 end
 
 board = initialize_board
 display_board(board)
 
-player_place_piece(board)
+player_add_piece!(board)
 display_board(board)
