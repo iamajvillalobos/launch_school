@@ -3,6 +3,11 @@ require 'pry'
 INITIALIZE_MARKER = ' '.freeze
 PLAYER_MARKER = 'X'.freeze
 COMPUTER_MARKER = 'O'.freeze
+WINNING_LINES = [
+  [1, 2, 3], [4, 5, 6], [7, 8, 9],
+  [1, 4, 7], [2, 5, 8], [3, 6, 9],
+  [1, 5, 9], [3, 5, 7]
+].freeze
 
 def initialize_board
   new_board = {}
@@ -10,6 +15,7 @@ def initialize_board
   new_board
 end
 
+# rubocop:disable Metrics/MethodLength, Metrics/AbcSize
 def display_board(board)
   system 'clear'
   puts "You're the #{PLAYER_MARKER}, Computer is #{COMPUTER_MARKER}."
@@ -29,6 +35,7 @@ def display_board(board)
   puts '------+-----+------'
   puts ''
 end
+# rubocop:enable Metrics/MethodLength, Metrics/AbcSize
 
 def empty_squares(board)
   board.keys.select { |num| board[num] == INITIALIZE_MARKER }
@@ -56,27 +63,16 @@ def board_full?(board)
 end
 
 def detect_winner(board)
-  winning_lines = [
-    [1, 2, 3], [4, 5, 6], [7, 8, 9],
-    [1, 4, 7], [2, 5, 8], [3, 6, 9],
-    [1, 5, 9], [3, 5, 7]
-  ]
-
-  winning_lines.each do |lines|
-    if board[lines[0]] == 'X' &&
-       board[lines[1]] == 'X' &&
-       board[lines[2]] == 'X'
-      return 'Player'
-    elsif lines[0] == 'O' && lines[1] == 'O' && lines[2] == 'O'
-      return 'Computer'
-    end
+  WINNING_LINES.each do |lines|
+    return 'Player' if board.values_at(*lines).count(PLAYER_MARKER) == 3
+    return 'Computer' if board.values_at(*lines).count(COMPUTER_MARKER) == 3
   end
-
   nil
 end
 
 def someone_won?(board)
-  !!detect_winner(board)
+  return true if detect_winner(board).is_a?(String)
+  false
 end
 
 loop do
