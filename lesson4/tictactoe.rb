@@ -12,6 +12,7 @@ end
 
 def display_board(board)
   system 'clear'
+  puts "You're the #{PLAYER_MARKER}, Computer is #{COMPUTER_MARKER}."
   puts ''
   puts '------+-----+------'
   puts '|     |     |     |'
@@ -78,18 +79,30 @@ def someone_won?(board)
   !!detect_winner(board)
 end
 
-board = initialize_board
-display_board(board)
-
 loop do
-  player_add_piece!(board)
-  computer_add_piece!(board)
+  board = initialize_board
+
+  loop do
+    display_board(board)
+
+    player_add_piece!(board)
+    break if someone_won?(board) || board_full?(board)
+
+    computer_add_piece!(board)
+    break if someone_won?(board) || board_full?(board)
+  end
+
   display_board(board)
-  break if someone_won?(board) || board_full?(board)
+
+  if someone_won?(board)
+    puts "#{detect_winner(board)} won!"
+  else
+    puts "It's a tie!"
+  end
+
+  puts 'Do you want to play again? (y or n)'
+  answer = gets.chomp
+  break unless answer.downcase.start_with?('y')
 end
 
-if someone_won?(board)
-  puts "#{detect_winner(board)} won!"
-else
-  puts "It's a tie!"
-end
+puts 'Thank you for playing!'
