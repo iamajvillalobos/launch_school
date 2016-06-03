@@ -1,6 +1,10 @@
+INITIALIZE_MARKER = ' '
+PLAYER_MARKER = 'X'
+COMPUTER_MARKER = 'O'
+
 def initialize_board
   new_board = {}
-  (1..9).each { |num| new_board[num] = 'O' }
+  (1..9).each { |num| new_board[num] = ' ' }
   new_board
 end
 
