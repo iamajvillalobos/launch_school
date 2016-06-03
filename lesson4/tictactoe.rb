@@ -31,7 +31,7 @@ end
 def player_add_piece!(board)
   square = ''
   loop do
-    puts "Choose a square (1 - 9)"
+    puts "Choose a square: (#{empty_squares(board).join(', ')})"
     square = gets.chomp.to_i
     break if empty_squares(board).include?(square)
     puts "Invalid option. Please select from valid choices."
