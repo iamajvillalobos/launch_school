@@ -16,9 +16,10 @@ def initialize_board
 end
 
 # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
-def display_board(board)
+def display_board(board, player_score, computer_score)
   system 'clear'
   puts "You're the #{PLAYER_MARKER}, Computer is #{COMPUTER_MARKER}."
+  puts "Player: #{player_score} - Computer: #{computer_score}"
   puts ''
   puts '------+-----+------'
   puts '|     |     |     |'
@@ -62,7 +63,7 @@ def board_full?(board)
   empty_squares(board).empty?
 end
 
-def detect_winner(board)
+def detect_round_winner(board)
   WINNING_LINES.each do |lines|
     return 'Player' if board.values_at(*lines).count(PLAYER_MARKER) == 3
     return 'Computer' if board.values_at(*lines).count(COMPUTER_MARKER) == 3
@@ -70,35 +71,55 @@ def detect_winner(board)
   nil
 end
 
-def someone_won?(board)
-  return true if detect_winner(board).is_a?(String)
+def detect_game_winner(player_score, computer_score)
+  return 'Player' if player_score == 5
+  return 'Computer' if computer_score == 5
+  nil
+end
+
+def someone_won_round?(board)
+  return true if detect_round_winner(board).is_a?(String)
   false
 end
+
+def someone_won_game?(player_score, computer_score)
+  return true if detect_game_winner(player_score, computer_score).is_a?(String)
+  false
+end
+
+player_score = 0
+computer_score = 0
 
 loop do
   board = initialize_board
 
   loop do
-    display_board(board)
+    display_board(board, player_score, computer_score)
 
     player_add_piece!(board)
-    break if someone_won?(board) || board_full?(board)
+    break if someone_won_round?(board) || board_full?(board)
 
     computer_add_piece!(board)
-    break if someone_won?(board) || board_full?(board)
+    break if someone_won_round?(board) || board_full?(board)
   end
 
-  display_board(board)
-
-  if someone_won?(board)
-    puts "#{detect_winner(board)} won!"
+  if someone_won_round?(board)
+    player_score += 1 if detect_round_winner(board) == 'Player'
+    computer_score += 1 if detect_round_winner(board) == 'Computer'
   else
     puts "It's a tie!"
   end
 
-  puts 'Do you want to play again? (y or n)'
-  answer = gets.chomp
-  break unless answer.downcase.start_with?('y')
+  display_board(board, player_score, computer_score)
+
+  if someone_won_game?(player_score, computer_score)
+    puts "Game Over! #{detect_game_winner(player_score, computer_score)} won!"
+    break
+  else
+    puts 'Do you want to play again? (y or n)'
+    answer = gets.chomp
+    break unless answer.downcase.start_with?('y')
+  end
 end
 
 puts 'Thank you for playing!'
