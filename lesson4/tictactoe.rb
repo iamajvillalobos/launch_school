@@ -55,33 +55,45 @@ def player_add_piece!(board)
 end
 
 def computer_add_piece!(board)
+  square = computer_choice(board)
+  board[square] = COMPUTER_MARKER
+end
+
+def computer_choice(board)
+  winning_square(board) ||
+    losing_square(board) ||
+    middle_or_random_square(board)
+end
+
+def middle_or_random_square(board)
+  square = if board[5] == ' '
+             5
+           else
+             empty_squares(board).sample
+           end
+  square
+end
+
+def winning_square(board)
   square = nil
 
-  # offense
   WINNING_LINES.each do |line|
     square = find_risk_at_square(line, board, COMPUTER_MARKER)
     break if square
   end
 
-  # defense
-  if square.nil?
-    WINNING_LINES.each do |line|
-      square = find_risk_at_square(line, board, PLAYER_MARKER)
-      break if square
-    end
+  square
+end
+
+def losing_square(board)
+  square = nil
+
+  WINNING_LINES.each do |line|
+    square = find_risk_at_square(line, board, PLAYER_MARKER)
+    break if square
   end
 
-  # if square 5 is available
-  if square.nil?
-    square = 5 if board[5] == ' '
-  end
-
-  # random
-  if square.nil?
-    square = empty_squares(board).sample
-  end
-
-  board[square] = COMPUTER_MARKER
+  square
 end
 
 def board_full?(board)
