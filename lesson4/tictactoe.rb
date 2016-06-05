@@ -131,18 +131,33 @@ def find_risk_at_square(line, board, marker)
   end
 end
 
+def place_piece!(board, current_player)
+  player_add_piece!(board) if current_player == 'player'
+  computer_add_piece!(board) if current_player == 'computer'
+end
+
+def alternate_player(current_player)
+  return 'computer' if current_player == 'player'
+  return 'player' if current_player == 'computer'
+end
+
+def reset_current_player
+  'player'
+end
+
+# Game Starts Here
+
 scores = { player: 0, computer: 0 }
+current_player = 'player'
 
 loop do
   board = initialize_board
+  current_player = reset_current_player
 
   loop do
     display_board(board, scores)
-
-    player_add_piece!(board)
-    break if someone_won_round?(board) || board_full?(board)
-
-    computer_add_piece!(board)
+    place_piece!(board, current_player)
+    current_player = alternate_player(current_player)
     break if someone_won_round?(board) || board_full?(board)
   end
 
