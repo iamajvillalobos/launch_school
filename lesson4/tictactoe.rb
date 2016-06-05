@@ -59,23 +59,28 @@ def computer_add_piece!(board)
 
   # offense
   WINNING_LINES.each do |line|
-    square = find_risk_at_square(line, board, PLAYER_MARKER)
+    square = find_risk_at_square(line, board, COMPUTER_MARKER)
     break if square
   end
 
   # defense
   if square.nil?
     WINNING_LINES.each do |line|
-      square = find_risk_at_square(line, board, COMPUTER_MARKER)
+      square = find_risk_at_square(line, board, PLAYER_MARKER)
       break if square
     end
   end
 
-  # random 
+  # if square 5 is available
+  if square.nil?
+    square = 5 if board[5] == ' '
+  end
+
+  # random
   if square.nil?
     square = empty_squares(board).sample
   end
-  
+
   board[square] = COMPUTER_MARKER
 end
 
@@ -107,7 +112,7 @@ end
 
 def find_risk_at_square(line, board, marker)
   if board.values_at(*line).count(marker) == 2
-    blank_squares = board.select do |k,v|
+    blank_squares = board.select do |k, v|
       line.include?(k) && v == INITIALIZE_MARKER
     end
     blank_squares.keys.first
